@@ -19,15 +19,15 @@ jobs:
       - run: "mkdir -p ~/.local/bin/"
       - run: "curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba"
       - run: "which micromamba"
-      # - name: "Create Environment 1"
-      #   run: "${MAMBA_EXE}" create -f environment1.yml -n env1 -y
-      # - name: "Create Environment 2"
-      #   run: "${MAMBA_EXE}" create -f environment2.yml -n env2 -y
-      # - run: |
-      #     eval "$(${MAMBA_EXE} shell hook)"
-      #     "${MAMBA_EXE}" activate env1
-      #     "${MAMBA_EXE}" activate --stack env2
-      #     echo "${PATH}"
+      - name: "Create Environment 1"
+        run: "${MAMBA_EXE}" create -f environment1.yml -n env1 -y
+      - name: "Create Environment 2"
+        run: "${MAMBA_EXE}" create -f environment2.yml -n env2 -y
+      - run: |
+          eval "$(${MAMBA_EXE} shell hook)"
+          "${MAMBA_EXE}" activate env1
+          "${MAMBA_EXE}" activate --stack env2
+          echo "${PATH}"
       # - run: tail -n 20 ~/.bashrc
       # - run: env | sort
       # - run: echo "${PATH}"
