@@ -1,0 +1,25 @@
+---
+
+jobs:
+  run_tests:
+    name: "Test stacked environments"
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: "bash -elo pipefail {0}"
+
+    steps:
+      - run: "env | sort"
+      - uses: "actions/checkout@v3"
+      - uses: "mamba-org/setup-micromamba@v1"
+      - name: "Create Environments"
+        run: |
+          micromamba create -f environment1.yml -n env1 -y
+          micromamba create -f environment2.yml -n env2 -y
+          echo "micromamba activate env1" | tee -a ~/.bashrc
+          echo "micromamba activate --stack env2" | tee -a ~/.bashrc
+      - run: tail -n 30 ~/.bashrc
+      - run: env | sort
+      - ruN: echo "${PATH}"
+      - run: gdal-config    # This is from env1
+      - run: geos-config    # this is from env2
