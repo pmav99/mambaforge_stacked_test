@@ -20,7 +20,9 @@ jobs:
       - name: Install micromamba
         run: |
           curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
-          eval $(micromamba shell hook)
+          echo export MAMBA_EXE=$(which micromamba) | tee -a ~/.bashrc
+          echo export MAMBA_ROOT_PREFIX=~/micromamba | tee -a ~/.bashrc
+          echo eval $(micromamba shell hook) | tee -a ~/.bashrc
       - name: Install env1
         run: |
           micromamba create -f environment1.yml -n env1 -y
