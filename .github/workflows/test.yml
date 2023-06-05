@@ -16,9 +16,10 @@ jobs:
     steps:
       - run: "env | sort"
       - uses: "actions/checkout@v3"
-      - run: "mkdir -p ~/.local/bin/"
+      - run:
       - name: Install micromamba
         run: |
+          mkdir -p ~/.local/bin/
           curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
           echo export MAMBA_EXE=$(which micromamba) | tee -a ~/.bashrc
           echo export MAMBA_ROOT_PREFIX=~/micromamba | tee -a ~/.bashrc
@@ -33,6 +34,11 @@ jobs:
           echo micromamba activate --stack env2 | tee -a ~/.bashrc
       - run: tail -n 5 ~/.bashrc
       - run: echo "${PATH}"
+      - run: |
+          eval $(micromamba shell hook)
+          micromamba activate env1
+          micromamba activate --stack env2
+          echo "${PATH}"
       # - run: tail -n 20 ~/.bashrc
       # - run: env | sort
       # - run: echo "${PATH}"
