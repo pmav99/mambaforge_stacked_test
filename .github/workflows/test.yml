@@ -25,6 +25,6 @@ jobs:
           echo "micromamba activate --stack env2" | tee -a ~/.bashrc
       - run: tail -n 30 ~/.bashrc
       - run: env | sort
-      - ruN: echo "${PATH}"
+      - run: echo "${PATH}"
       - run: gdal-config    # This is from env1
       - run: geos-config    # this is from env2
