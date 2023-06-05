@@ -17,15 +17,19 @@ jobs:
       - run: "env | sort"
       - uses: "actions/checkout@v3"
       - run: "mkdir -p ~/.local/bin/"
-      - run: "curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba"
-      - run: "which micromamba"
-      - run: "micromamba create -f environment1.yml -n env1 -y"
-      - run: "micromamba create -f environment2.yml -n env2 -y"
-      - run: |
-          eval "$(micromamba shell hook)"
-          micromamba activate env1
-          micromamba activate --stack env2
-          echo "${PATH}"
+      - name: Install micromamba
+        run: |
+          curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
+          eval $(micromamba shell hook)
+      - name: Install env1
+        run: |
+          micromamba create -f environment1.yml -n env1 -y
+          echo micromamba activate env1 | tee -a ~/.bashrc
+      - name: Install env2
+        run: |
+          micromamba create -f environment2.yml -n env2 -y
+          echo micromamba activate --stack env2 | tee -a ~/.bashrc
+      - run: echo "${PATH}"
       # - run: tail -n 20 ~/.bashrc
       # - run: env | sort
       # - run: echo "${PATH}"
