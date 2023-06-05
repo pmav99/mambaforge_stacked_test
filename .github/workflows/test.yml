@@ -19,13 +19,15 @@ jobs:
       - uses: "mamba-org/setup-micromamba@v1"
         with:
           init-shell: none
-      - run: which micromamba
       - name: "Create Environments"
         run: |
-          micromamba create -f environment1.yml -n env1 -y
-          micromamba create -f environment2.yml -n env2 -y
-          echo "micromamba activate env1" | tee -a ~/.bashrc
-          echo "micromamba activate --stack env2" | tee -a ~/.bashrc
+          "${MAMBA_EXE}" create -f environment1.yml -n env1 -y
+          "${MAMBA_EXE}" create -f environment2.yml -n env2 -y
+      - run: |
+          eval "$(${MAMBA_EXE} shell hook)"
+          "${MAMBA_EXE}" activate env1
+          "${MAMBA_EXE}" activate --stack env2
+          echo "${PATH}"
       - run: tail -n 20 ~/.bashrc
       - run: env | sort
       - run: echo "${PATH}"
