@@ -17,13 +17,15 @@ jobs:
       - run: "env | sort"
       - uses: "actions/checkout@v3"
       - uses: "mamba-org/setup-micromamba@v1"
+        init_shell: none
+      - run: which micromamba
       - name: "Create Environments"
         run: |
           micromamba create -f environment1.yml -n env1 -y
           micromamba create -f environment2.yml -n env2 -y
           echo "micromamba activate env1" | tee -a ~/.bashrc
           echo "micromamba activate --stack env2" | tee -a ~/.bashrc
-      - run: tail -n 30 ~/.bashrc
+      - run: tail -n 20 ~/.bashrc
       - run: env | sort
       - run: echo "${PATH}"
       - run: micromamba env list
