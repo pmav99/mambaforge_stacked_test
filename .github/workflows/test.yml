@@ -16,13 +16,16 @@ jobs:
     steps:
       - run: "env | sort"
       - uses: "actions/checkout@v3"
+      - run: curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
+      - run: which micromamba
+
       - uses: "mamba-org/setup-micromamba@v1"
         with:
           init-shell: none
-      - name: "Create Environments"
-        run: |
-          "${MAMBA_EXE}" create -f environment1.yml -n env1 -y
-          "${MAMBA_EXE}" create -f environment2.yml -n env2 -y
+      - name: "Create Environment 1"
+        run: "${MAMBA_EXE}" create -f environment1.yml -n env1 -y
+      - name: "Create Environment 2"
+        run: "${MAMBA_EXE}" create -f environment2.yml -n env2 -y
       - run: |
           eval "$(${MAMBA_EXE} shell hook)"
           "${MAMBA_EXE}" activate env1
