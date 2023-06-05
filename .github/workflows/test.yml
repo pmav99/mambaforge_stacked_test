@@ -16,6 +16,7 @@ jobs:
     steps:
       - run: "env | sort"
       - uses: "actions/checkout@v3"
+      - run: "mkdir -p ~/.local/bin/"
       - run: "curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba"
       - run: "which micromamba"
       # - name: "Create Environment 1"
