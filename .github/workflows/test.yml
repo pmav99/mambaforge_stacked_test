@@ -1,5 +1,10 @@
 ---
 
+name: "Action Name"
+
+on:
+  push:
+
 jobs:
   run_tests:
     name: "Test stacked environments"
