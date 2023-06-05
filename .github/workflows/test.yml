@@ -26,5 +26,9 @@ jobs:
       - run: tail -n 30 ~/.bashrc
       - run: env | sort
       - run: echo "${PATH}"
+      - run: micromamba env list
+        shell: bash -el {0}
+      - run: echo "${PATH}"
+        shell: bash -el {0}
       - run: gdal-config    # This is from env1
       - run: geos-config    # this is from env2
