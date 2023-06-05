@@ -35,9 +35,9 @@ jobs:
       - run: tail -n 5 ~/.bashrc
       - run: echo "${PATH}"
       - run: |
-          eval "$(micromamba shell hook)"
-          micromamba activate env1
-          micromamba activate --stack env2
+          # eval "$(micromamba shell hook)"
+          # micromamba activate env1
+          # micromamba activate --stack env2
           echo "${PATH}"
       # - run: tail -n 20 ~/.bashrc
       # - run: env | sort
