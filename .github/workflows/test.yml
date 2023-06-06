@@ -38,3 +38,5 @@ jobs:
           micromamba activate env1
           micromamba activate --stack env2
           echo "${PATH}"
+          proj -lu
+          gdal-config --version
