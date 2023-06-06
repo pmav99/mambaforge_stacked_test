@@ -39,4 +39,4 @@ jobs:
           micromamba activate --stack env2
           echo "${PATH}"
           proj -lu
-          gdal-config --version
+          geos-config --version
