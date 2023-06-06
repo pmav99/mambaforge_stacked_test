@@ -14,15 +14,14 @@ jobs:
       matrix:
         mpi: [ "mpich", "openmpi" ]
     env:
-      CUSTOM_ENV: conda-"${{ matrix.mpi }}"
+      CUSTOM_ENV: "conda-${{ matrix.mpi }}"
 
     defaults:
       run:
         shell: "bash -elo pipefail {0}"
 
     steps:
-      - run: "env | sort"
-      - run: "echo ${CUSTOM_ENV}"
+      - run: "echo \"${CUSTOM_ENV}\""
 
       # - uses: "actions/checkout@v3"
       # - name: Install micromamba
