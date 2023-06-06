@@ -9,40 +9,54 @@ jobs:
   run_tests:
     name: "Test stacked environments"
     runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        mpi: [ "mpich", "openmpi" ]
+    env:
+      CUSTOM_ENV: conda-"${{ matrix.mpi }}"
+
     defaults:
       run:
         shell: "bash -elo pipefail {0}"
 
     steps:
       - run: "env | sort"
-      - uses: "actions/checkout@v3"
-      - name: Install micromamba
-        run: |
-          mkdir -p ~/.local/bin/
-          curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
-          echo export MAMBA_EXE=$(which micromamba) | tee -a ~/.bashrc
-          echo export MAMBA_ROOT_PREFIX=~/micromamba | tee -a ~/.bashrc
+      - run: "echo ${CUSTOM_ENV}"
 
-      - uses: actions/cache@v3
-        id: cache-env1
-        with:
-          path: ~/micromamba/envs/env1
-          key: ${{ hashFiles('environment1.yml') }}
-      - uses: actions/cache@v3
-        id: cache-env2
-        with:
-          path: ~/micromamba/envs/env2
-          key: ${{ hashFiles('environment2.yml') }}
-      - name: Install env1
-        if: steps.cache-env1.outputs.cache-hit != 'true'
-        run: micromamba create -f environment1.yml -n env1 -y
-      - name: Install env2
-        if: steps.cache-env2.outputs.cache-hit != 'true'
-        run: micromamba create -f environment2.yml -n env2 -y
-      - run: echo "${PATH}"
-      - name: Run commands
-        run: |
-          eval "$(micromamba shell hook)"
-          micromamba activate env1
-          micromamba activate --stack env2
-          echo "${PATH}"
+      # - uses: "actions/checkout@v3"
+      # - name: Install micromamba
+      #   run: |
+      #     mkdir -p ~/.local/bin/
+      #     curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
+      #     echo export MAMBA_EXE=$(which micromamba) | tee -a ~/.bashrc
+      #     echo export MAMBA_ROOT_PREFIX=~/micromamba | tee -a ~/.bashrc
+      #
+      # - uses: actions/cache@v3
+      #   id: cache-env1
+      #   with:
+      #     path: ~/micromamba/envs/env1
+      #     key: ${{ hashFiles('environment1.yml') }}
+      #
+      # - uses: actions/cache@v3
+      #   id: cache-env2
+      #   with:
+      #     path: ~/micromamba/envs/env2
+      #     key: ${{ hashFiles('environment2.yml') }}
+      #
+      # - name: Install env1
+      #   if: steps.cache-env1.outputs.cache-hit != 'true'
+      #   run: micromamba create -f environment1.yml -n env1 -y
+      #
+      # - name: Install env2
+      #   if: steps.cache-env2.outputs.cache-hit != 'true'
+      #   run: micromamba create -f environment2.yml -n env2 -y
+      #
+      # - run: echo "${PATH}"
+      #
+      # - name: Run commands
+      #   run: |
+      #     eval "$(micromamba shell hook)"
+      #     micromamba activate env1
+      #     micromamba activate --stack env2
+      #     echo "${PATH}"
