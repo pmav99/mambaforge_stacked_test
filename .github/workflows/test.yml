@@ -22,20 +22,27 @@ jobs:
           curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba
           echo export MAMBA_EXE=$(which micromamba) | tee -a ~/.bashrc
           echo export MAMBA_ROOT_PREFIX=~/micromamba | tee -a ~/.bashrc
+
+      - uses: actions/cache@v3
+        id: cache-env1
+        with:
+          path: ~/micromamba/envs/env1
+          key: ${{ hashFiles('environment1.yml') }}
+      - uses: actions/cache@v3
+        id: cache-env2
+        with:
+          path: ~/micromamba/envs/env2
+          key: ${{ hashFiles('environment2.yml') }}
       - name: Install env1
-        run: |
-          micromamba create -f environment1.yml -n env1 -y
-          # echo micromamba activate env1 | tee -a ~/.bashrc
+        if: steps.cache-env1.outputs.cache-hit != 'true'
+        run: micromamba create -f environment1.yml -n env1 -y
       - name: Install env2
-        run: |
-          micromamba create -f environment2.yml -n env2 -y
-          # echo micromamba activate --stack env2 | tee -a ~/.bashrc
-      - run: tail -n 5 ~/.bashrc
+        if: steps.cache-env2.outputs.cache-hit != 'true'
+        run: micromamba create -f environment2.yml -n env2 -y
       - run: echo "${PATH}"
-      - run: |
+      - name: Run commands
+        run: |
           eval "$(micromamba shell hook)"
           micromamba activate env1
           micromamba activate --stack env2
           echo "${PATH}"
-          proj -lu
-          geos-config --version
