@@ -26,11 +26,11 @@ jobs:
       - name: Install env1
         run: |
           micromamba create -f environment1.yml -n env1 -y
-          echo micromamba activate env1 | tee -a ~/.bashrc
+          # echo micromamba activate env1 | tee -a ~/.bashrc
       - name: Install env2
         run: |
           micromamba create -f environment2.yml -n env2 -y
-          echo micromamba activate --stack env2 | tee -a ~/.bashrc
+          # echo micromamba activate --stack env2 | tee -a ~/.bashrc
       - run: tail -n 5 ~/.bashrc
       - run: echo "${PATH}"
       - run: |
